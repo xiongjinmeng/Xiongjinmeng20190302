@@ -36,7 +36,7 @@ public class Moder {
                     public void onNext(ResponseBody responseBody) {
                         try {
                             String string = responseBody.string();
-                            Log.e("-----",string);
+//                            Log.e("-----",string);
                             Gson gson = new Gson();
                             Object o = gson.fromJson(string, aClass);
                             iModer.onSuccessful(o);

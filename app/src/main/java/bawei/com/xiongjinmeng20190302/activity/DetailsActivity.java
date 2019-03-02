@@ -23,6 +23,7 @@ import java.util.Map;
 
 import bawei.com.xiongjinmeng20190302.R;
 import bawei.com.xiongjinmeng20190302.bean.DetailsBean;
+import bawei.com.xiongjinmeng20190302.event.DetailsEvemt;
 import bawei.com.xiongjinmeng20190302.presenter.Presenter;
 import bawei.com.xiongjinmeng20190302.util.Api;
 import bawei.com.xiongjinmeng20190302.view.IView;
@@ -56,10 +57,11 @@ public class DetailsActivity extends AppCompatActivity implements IView {
 
     }
     @Subscribe(threadMode = ThreadMode.ASYNC,sticky = true)
-    public void dcc2(String s){
+    public void dcc2(DetailsEvemt evemt){
+        String commodityId = evemt.commodityId;
         presenter = new Presenter(this);
         Map<String, String> map = new HashMap<>();
-        map.put("commodityId",s);
+        map.put("commodityId",commodityId);
         presenter.get(Api.FINDCOMMODITY_URL, map, DetailsBean.class);
     }
     @Override
@@ -101,6 +103,8 @@ public class DetailsActivity extends AppCompatActivity implements IView {
             textNum.setText("已售"+saleNum+"件");
             String details = bean.getResult().getDetails();
             webView.loadDataWithBaseURL(null,details,"text/html" , "utf-8", null);
+
+            
 
         } else {
             Toast.makeText(DetailsActivity.this, message, Toast.LENGTH_SHORT).show();

@@ -22,6 +22,7 @@ import java.util.List;
 import bawei.com.xiongjinmeng20190302.R;
 import bawei.com.xiongjinmeng20190302.activity.DetailsActivity;
 import bawei.com.xiongjinmeng20190302.bean.QueryShoppingCartBean;
+import bawei.com.xiongjinmeng20190302.event.DetailsEvemt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -63,7 +64,7 @@ public class MyShoppinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             homder.simpImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    EventBus.getDefault().postSticky(""+commodityId);
+                    EventBus.getDefault().postSticky(new DetailsEvemt(commodityId+""));
                     Intent intent = new Intent(context, DetailsActivity.class);
                     context.startActivity(intent);
                 }
