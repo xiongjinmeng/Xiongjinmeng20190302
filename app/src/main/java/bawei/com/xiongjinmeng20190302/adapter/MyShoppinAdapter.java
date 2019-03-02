@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
@@ -23,6 +24,7 @@ import bawei.com.xiongjinmeng20190302.R;
 import bawei.com.xiongjinmeng20190302.activity.DetailsActivity;
 import bawei.com.xiongjinmeng20190302.bean.QueryShoppingCartBean;
 import bawei.com.xiongjinmeng20190302.event.DetailsEvemt;
+import bawei.com.xiongjinmeng20190302.event.ShoppinEvent;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -54,6 +56,7 @@ public class MyShoppinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         String commodityName = list.get(i).getCommodityName();
         int count = list.get(i).getCount();
         String pic = list.get(i).getPic();
+        boolean iscik = list.get(i).isIscik();
         double price = list.get(i).getPrice();
         if (viewHolder instanceof Homder){
             Homder homder = (Homder) viewHolder;
@@ -61,12 +64,44 @@ public class MyShoppinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             homder.textListTitel.setText(commodityName);
             homder.textListPrice.setText("￥"+price);
             homder.textListNum.setText(""+count);
+            homder.checkShoppinList.setChecked(iscik);
             homder.simpImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     EventBus.getDefault().postSticky(new DetailsEvemt(commodityId+""));
                     Intent intent = new Intent(context, DetailsActivity.class);
                     context.startActivity(intent);
+                }
+            });
+            homder.checkShoppinList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    list.get(i).setIscik(homder.checkShoppinList.isChecked());
+                    EventBus.getDefault().post(new ShoppinEvent(2));
+                }
+            });
+            homder.textListJia.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int count1 = list.get(i).getCount();
+                    int i1 = count1 + 1;
+                    list.get(i).setCount(i1);
+                    homder.textListNum.setText(i1+"");
+                    EventBus.getDefault().post(new ShoppinEvent(1));
+                }
+            });
+            homder.textListJian.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int count1 = list.get(i).getCount();
+                    if (count1==1){
+                        Toast.makeText(context, "数量最少为1", Toast.LENGTH_SHORT).show();
+                    } else {
+                        int i1 = count1 - 1;
+                        list.get(i).setCount(i1);
+                        homder.textListNum.setText(i1+"");
+                        EventBus.getDefault().post(new ShoppinEvent(1));
+                    }
                 }
             });
         }
